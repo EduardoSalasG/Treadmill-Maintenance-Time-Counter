@@ -1,0 +1,13 @@
+{
+  "name": "treadmil-maintenance-time-counter",
+  "version": "1.0.0",
+  "description": "Treadmill maintenance time counter",
+  "main": "app.js",
+  "scripts": {
+    "dev": "tsnd --respawn --clear src/app.ts",
+    "build": "rimraf ./dist && tsc",
+    "start": "npm run build && node dist/app.js"
+  },
+  "author": "Eduardo Salas",
+  "license": "ISC"
+}
