@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { AuthController } from './controller';
 // import { AuthService, EmailService } from '../services';
 import { envs } from '../../config/envs';
+import { AuthService } from '../services';
 
 
 
@@ -21,16 +22,17 @@ export class AuthRoutes {
         // );
 
         // const authService = new AuthService(emailService);
+        const authService = new AuthService();
 
-        const controller = new AuthController();
+        const controller = new AuthController(authService);
 
         // Definir las rutas
-        // router.use('/api/todos', /*TodoRoutes.routes */ );
-        // router.post('/login', controller.loginUser);
-        // router.post('/register', controller.registerUser);
+        // router.use('/api/todos', /*TodoRoutes.routes */);
+        router.post('/login', controller.loginUser);
+        router.post('/register', controller.registerUser);
 
         // router.get('/validate-email/:token', controller.validateEmail);
-        router.get('/test', controller.test);
+        // router.get('/test', controller.test);
 
         return router;
     }

@@ -1,1 +1,6 @@
 export * from './mongo-database'
+export * from './models/machine.model'
+export * from './models/machineType.model'
+export * from './models/maintenance.model'
+export * from './models/session.model'
+export * from './models/user.model'

@@ -1,12 +1,12 @@
-import { CreateMachineDTO, CustomError } from "../../domain";
-import { MachineService } from "../services";
+import { CreateMachineTypeDTO, CustomError } from "../../domain";
+import { MachineTypeService } from "../services";
 import { Request, Response } from "express";
 
 
-export class MachineController {
+export class MachineTypeController {
 
     constructor(
-        public readonly machineService: MachineService,
+        public readonly machineTypeService: MachineTypeService,
     ) { }
 
     private handleError = ((error: unknown, res: Response) => {
@@ -19,14 +19,14 @@ export class MachineController {
 
     })
 
-    createMachine = (req: Request, res: Response) => {
-        const [error, createMachineDto] = CreateMachineDTO.create(req.body);
+    createMachineType = (req: Request, res: Response) => {
+        const [error, createMachineTypeDto] = CreateMachineTypeDTO.create(req.body);
         if (error) return res.status(400).json({ error })
 
 
 
-        this.machineService.createMachine(createMachineDto!)
-            .then((machine) => res.json(machine))
+        this.machineTypeService.createMachineType(createMachineTypeDto!)
+            .then((machineType) => res.json(machineType))
             .catch(error => this.handleError(error, res))
 
     }

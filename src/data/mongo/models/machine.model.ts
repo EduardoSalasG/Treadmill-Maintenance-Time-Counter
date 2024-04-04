@@ -5,14 +5,17 @@ const machineSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Name is required'],
+        unique: true
     },
     currentUsedTime: {
         type: Number,
         required: [true, 'Current Used Time is required'],
+        default: 0
     },
     accumulatedUsedTime: {
         type: Number,
         required: [true, 'Accumulated Used Time is required'],
+        default: 0
     },
     limitTime: {
         type: Number,
