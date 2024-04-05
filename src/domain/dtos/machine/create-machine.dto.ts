@@ -1,3 +1,4 @@
+import { Validators } from "../../../config";
 
 
 export class CreateMachineDTO {
@@ -16,6 +17,7 @@ export class CreateMachineDTO {
         if (!name) return ['Missing name'];
         if (!limitTime) return ['Missing limit time'];
         if (!machineType) return ['Missing machine type'];
+        if (!Validators.isMongoID(machineType)) return ['Invalid machine type ID'];
 
 
         return [undefined, new CreateMachineDTO(name, limitTime, machineType)]

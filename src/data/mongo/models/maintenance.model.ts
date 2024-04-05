@@ -15,6 +15,11 @@ const maintenanceSchema = new mongoose.Schema({
         ref: 'Machine',
         required: true
     },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 })
 
 maintenanceSchema.set('toJSON', {
