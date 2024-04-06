@@ -21,6 +21,11 @@ const machineSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Limit Time is required']
     },
+    status: {
+        type: String,
+        default: 'OPERATIVE',
+        enum: ['OPERATIVE', 'NEEDS MAINTENANCE']
+    },
     machineType: {
         type: Schema.Types.ObjectId,
         ref: 'MachineType',

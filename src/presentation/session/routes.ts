@@ -13,7 +13,10 @@ export class SessionRoutes {
 
         const controller = new SessionController(sessionService);
 
-        router.post('/create', controller.createSession);
+        router.post('/', controller.createSession);
+        router.get('/:id', controller.getSessionById);
+        router.post('/by-machine', controller.getSessionsByMachineId);
+        router.post('/by-machine-and-user', controller.getSessionsByMachineIdAndUserId);
 
         return router;
 

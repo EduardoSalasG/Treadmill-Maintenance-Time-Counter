@@ -11,7 +11,9 @@ export class MaintenanceRoutes {
 
         const controller = new MaintenanceController(machineService);
 
-        router.post('/create', controller.createMaintenance);
+        router.post('/', controller.createMaintenance);
+        router.get('/:id', controller.getMaintenanceById);
+        router.post('/by-machine', controller.getMaintenancesByMachineId);
 
         return router;
     }

@@ -1,3 +1,4 @@
+import { Validators } from "../../config";
 import { MachineModel } from "../../data/mongo"
 import { CreateMachineDTO, CustomError } from "../../domain"
 
@@ -31,16 +32,65 @@ export class MachineService {
     }
 
     public async getMachines() {
-        return "Not implemented"
+
+        try {
+            const machines = await MachineModel.find();
+
+            if (!machines) throw CustomError.badRequest('There are not machines created')
+            return { machines }
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+        }
+
     }
 
-    public async getMachineById() {
-        return "Not implemented"
+    public async getMachineById(machineId: string) {
+
+        if (!Validators.isMongoID(machineId)) throw CustomError.badRequest('Invalid machine type ID');
+
+        try {
+            const machine = await MachineModel.findById(machineId)
+            if (!machine) throw CustomError.badRequest(`Machine with id ${machineId} doesn't exists`)
+
+            return machine
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+        }
     }
 
-    // public async updateMachine() {
-    //     return "Not implemented"
-    // }
+    public async updateMachineTimes(machineId: string, duration: number) {
+        console.log({ machineId, duration })
+
+        const machine = await MachineModel.findById(machineId)
+        if (!machine) throw CustomError.badRequest(`Machine with id ${machineId} doesn't exists`)
+        console.log(machine)
+
+        try {
+
+            let checkCurrentUsedTime = this.checkCurrentUsedTime(duration, machine.currentUsedTime, machine.limitTime)
+            if (checkCurrentUsedTime.exceeds) {
+                machine.currentUsedTime = checkCurrentUsedTime.newCurrentUsedTime - machine.limitTime;
+                machine.status = 'NEEDS MAINTENANCE';
+            } else {
+                machine.currentUsedTime += duration;
+            }
+
+            machine.accumulatedUsedTime += duration;
+
+            return await machine.save();
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`);
+        }
+
+    }
+
+    private checkCurrentUsedTime(duration: number, currentUsedTime: number, limitTime: number) {
+        let newCurrentUsedTime = duration + currentUsedTime
+        return { exceeds: newCurrentUsedTime >= limitTime, newCurrentUsedTime }
+    }
 
     // public async deleteMachine() {
     //     return "Not implemented"

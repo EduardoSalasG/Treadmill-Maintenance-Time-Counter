@@ -14,7 +14,10 @@ export class MachineRoutes {
 
         const controller = new MachineController(machineService);
 
-        router.post('/create', controller.createMachine);
+        router.get('/', controller.getMachines);
+        router.get('/:id', controller.getMachineById);
+        router.post('/', controller.createMachine);
+        // router.post('/edit/:id', controller.updateMachine);
 
         return router;
     }

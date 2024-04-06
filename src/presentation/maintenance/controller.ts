@@ -30,4 +30,24 @@ export class MaintenanceController {
 
     }
 
+    getMaintenanceById = (req: Request, res: Response) => {
+
+        const { id } = req.params;
+
+        this.maintenanceService.getMaintenanceById(id)
+            .then((maintenance) => res.json(maintenance))
+            .catch(error => this.handleError(error, res))
+    }
+
+
+    getMaintenancesByMachineId = (req: Request, res: Response) => {
+
+        const { machine } = req.body;
+
+        this.maintenanceService.getMaintenancesByMachineId(machine)
+            .then((maintenances) => res.json(maintenances))
+            .catch(error => this.handleError(error, res))
+    }
+
+
 }

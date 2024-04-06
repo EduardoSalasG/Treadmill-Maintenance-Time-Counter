@@ -24,7 +24,16 @@ export class SessionController {
         if (error) return res.status(500).json({ error })
 
         this.sesionService.createSession(createSessionDto!)
-            .then((maintenance) => res.json(maintenance))
+            .then((session) => res.json(session))
+            .catch(error => this.handleError(error, res))
+    }
+
+    getSessionById = (req: Request, res: Response) => {
+
+        const { id } = req.params;
+
+        this.sesionService.getSessionById(id)
+            .then((session) => res.json(session))
             .catch(error => this.handleError(error, res))
     }
 
@@ -33,18 +42,19 @@ export class SessionController {
         const { machine } = req.body;
 
         this.sesionService.getSessionsByMachineId(machine)
-            .then((maintenance) => res.json(maintenance))
+            .then((sessions) => res.json(sessions))
             .catch(error => this.handleError(error, res))
     }
 
-    getSessionId = (req: Request, res: Response) => {
+    getSessionsByMachineIdAndUserId = (req: Request, res: Response) => {
 
-        const { session } = req.body;
+        const { machine, user } = req.body;
 
-        this.sesionService.getSessionById(session)
-            .then((maintenance) => res.json(maintenance))
+        this.sesionService.getSessionsByMachineIdAndUserId(machine, user)
+            .then((sessions) => res.json(sessions))
             .catch(error => this.handleError(error, res))
     }
+
 
 
 
