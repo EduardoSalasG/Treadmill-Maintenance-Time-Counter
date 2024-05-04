@@ -1,3 +1,4 @@
+import { AuthService, MachineService } from ".";
 import { Validators } from "../../config";
 import { MachineModel, MaintenanceModel } from "../../data/mongo";
 import { CreateMaintenanceDTO, CustomError } from "../../domain";
@@ -5,20 +6,29 @@ import { CreateMaintenanceDTO, CustomError } from "../../domain";
 
 export class MaintenanceService {
 
-    constructor() { }
+    constructor(
+        private machineService: MachineService,
+        private authService: AuthService,
+    ) { }
 
 
-    //TODO: Update machine status to "OPERATIVE"
     public async createMaintenance(createMaintenanceDto: CreateMaintenanceDTO) {
+
+        await this.authService.userExists(createMaintenanceDto.user)
+
+        let status = await this.machineService.checkStatus(createMaintenanceDto.machine)
+        if (status) throw CustomError.badRequest(`Cannot create new maintenance because machine with id ${createMaintenanceDto.machine} doesn't need maintenance`)
 
         try {
 
             const maintenance = new MaintenanceModel(createMaintenanceDto);
 
-            maintenance.save()
+            await maintenance.save()
+            let status = await this.machineService.updateStatus(createMaintenanceDto.machine);
 
             return {
-                maintenance
+                maintenance,
+                status
             };
 
         }
@@ -46,6 +56,7 @@ export class MaintenanceService {
 
     public async getMaintenancesByMachineId(machineId: string) {
         if (!machineId) throw CustomError.badRequest('Missing machine ID');
+        //FIXME: Validación cuando se pasa un int
         if (!Validators.isMongoID(machineId)) throw CustomError.badRequest('Invalid machine ID');
 
         const machineExists = await MachineModel.findById(machineId)

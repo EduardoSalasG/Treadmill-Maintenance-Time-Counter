@@ -64,6 +64,18 @@ export class AuthService {
         }
     }
 
+    public async userExists(userId: string) {
+
+        try {
+            const existUser = await UserModel.findById(userId);
+            if (!existUser) throw CustomError.badRequest(`User doesn't exists`)
+            return
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+
+        }
+    }
+
 
     // private sendEmailValidationLink = async (email: string) => {
     //     const token = await JwtAdapter.generateToken({ email });

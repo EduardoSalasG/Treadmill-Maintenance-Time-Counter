@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { MaintenanceService } from "../services";
+import { AuthService, MachineService, MaintenanceService } from "../services";
 import { MaintenanceController } from "./controller";
 
 export class MaintenanceRoutes {
@@ -7,9 +7,12 @@ export class MaintenanceRoutes {
     static get routes(): Router {
         const router = Router();
 
-        const machineService = new MaintenanceService();
+        const machineService = new MachineService();
+        const authService = new AuthService();
 
-        const controller = new MaintenanceController(machineService);
+        const maintenanceService = new MaintenanceService(machineService, authService);
+
+        const controller = new MaintenanceController(maintenanceService);
 
         router.post('/', controller.createMaintenance);
         router.get('/:id', controller.getMaintenanceById);

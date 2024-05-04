@@ -92,6 +92,40 @@ export class MachineService {
         return { exceeds: newCurrentUsedTime >= limitTime, newCurrentUsedTime }
     }
 
+    public async checkStatus(machineID: string) {
+
+        const machine = await MachineModel.findById(machineID)
+        if (!machine) throw CustomError.badRequest(`Machine with id ${machine} doesn't exists`)
+
+        try {
+            return machine.status == 'OPERATIVE'
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+
+        }
+
+    }
+
+    public async updateStatus(machineID: string) {
+
+        const machine = await MachineModel.findById(machineID)
+        if (!machine) throw CustomError.badRequest(`Machine with id ${machine} doesn't exists`)
+
+        try {
+            machine.status == 'OPERATIVE' ? machine.status = 'NEEDS MAINTENANCE' : machine.status = 'OPERATIVE';
+            machine.save();
+            return machine.status;
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+
+        }
+
+    }
+
+
+
     // public async deleteMachine() {
     //     return "Not implemented"
     // }
