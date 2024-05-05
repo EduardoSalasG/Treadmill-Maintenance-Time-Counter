@@ -55,8 +55,8 @@ export class MaintenanceService {
     }
 
     public async getMaintenancesByMachineId(machineId: string) {
+        machineId = machineId.toString();
         if (!machineId) throw CustomError.badRequest('Missing machine ID');
-        //FIXME: Validación cuando se pasa un int
         if (!Validators.isMongoID(machineId)) throw CustomError.badRequest('Invalid machine ID');
 
         const machineExists = await MachineModel.findById(machineId)

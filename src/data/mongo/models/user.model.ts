@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
         type: [String],
         default: ['USER_ROLE'],
         enum: ['ADMIN_ROLE', 'USER_ROLE']
+    },
+    status: {
+        type: Boolean,
+        default: true,
     }
 })
 
