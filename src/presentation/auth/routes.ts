@@ -32,7 +32,7 @@ export class AuthRoutes {
         router.post('/register', controller.registerUser);
 
         // router.get('/validate-email/:token', controller.validateEmail);
-        // router.get('/test', controller.test);
+        router.get('/test', controller.test);
 
         return router;
     }
