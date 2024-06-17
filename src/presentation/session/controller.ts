@@ -55,6 +55,15 @@ export class SessionController {
             .catch(error => this.handleError(error, res))
     }
 
+    getSessionsByUserId = (req: Request, res: Response) => {
+
+        const { user } = req.body;
+
+        this.sesionService.getSessionsByUserId(user.id)
+            .then((sessions) => res.json(sessions))
+            .catch(error => this.handleError(error, res))
+    }
+
 
 
 

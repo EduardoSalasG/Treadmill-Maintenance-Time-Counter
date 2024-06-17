@@ -109,5 +109,26 @@ export class SessionService {
         }
     }
 
+    public async getSessionsByUserId(userId: any) {
+
+        if (!userId) throw CustomError.badRequest('Missing user ID');
+        if (!Validators.isMongoID(userId)) throw CustomError.badRequest('Invalid user ID');
+
+        const userExists = await UserModel.findById(userId)
+        if (!userExists) throw CustomError.badRequest(`User with id ${userId} doesn't exists`)
+
+        try {
+            const sessions = await SessionModel.find({ user: userId })
+                .populate('machine', 'name')
+            if (!sessions) throw CustomError.badRequest(`User with id ${userId} hasn't any session yet`)
+
+            return { sessions }
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+
+        }
+    }
+
+
 
 }

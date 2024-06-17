@@ -11,7 +11,8 @@ export class CreateSessionDTO {
     ) { }
 
     static create(object: { [key: string]: any }): [string?, CreateSessionDTO?] {
-        const { machine, user, duration } = object
+        let { machine, duration } = object
+        const user = object.user.id
 
         if (!machine) return ['Missing machine ID'];
         if (!Validators.isMongoID(machine)) return ['Invalid machine ID']
@@ -20,8 +21,9 @@ export class CreateSessionDTO {
         if (!duration) return ['Missing duration'];
         if (typeof +duration !== 'number') return ['Duration is not a number']
 
+        duration = duration * 60000
         const endDate: Date = new Date();
-        const initDate: Date = new Date(endDate.getTime() - duration * 60000)
+        const initDate: Date = new Date(endDate.getTime() - duration)
 
         return [undefined, new CreateSessionDTO(machine, user, initDate, duration, endDate)]
 

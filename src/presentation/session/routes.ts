@@ -17,6 +17,7 @@ export class SessionRoutes {
         router.get('/:id', controller.getSessionById);
         router.post('/by-machine', controller.getSessionsByMachineId);
         router.post('/by-machine-and-user', controller.getSessionsByMachineIdAndUserId);
+        router.post('/by-user', controller.getSessionsByUserId);
 
         return router;
 
